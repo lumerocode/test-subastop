@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { inventoryApi } from '@/features/inventory/inventoryApi';
+import inventoryReducer from '@/features/inventory/inventorySlice';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
-      [inventoryApi.reducerPath]: inventoryApi.reducer, 
+      [inventoryApi.reducerPath]: inventoryApi.reducer,
+      inventoryUI: inventoryReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
