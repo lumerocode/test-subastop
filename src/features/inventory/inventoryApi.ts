@@ -20,10 +20,21 @@ export const inventoryApi = createApi({
         headers: { 'Content-Type': 'application/json' },
         body: newProduct,
       }),
-
       invalidatesTags: ['Products'], 
+    }),
+
+    deleteProduct: builder.mutation<{ success: boolean; id: number }, number>({
+      query: (id) => ({
+        url: `products/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Products'],
     }),
   }),
 });
 
-export const { useGetProductsQuery, useAddProductMutation } = inventoryApi;
+export const { 
+  useGetProductsQuery, 
+  useAddProductMutation, 
+  useDeleteProductMutation 
+} = inventoryApi;

@@ -1,12 +1,25 @@
 'use client';
 import { useSelector } from 'react-redux';
 import { selectSearchTerm } from '../inventorySlice';
-import { useGetProductsQuery } from '../inventoryApi';
+import { useGetProductsQuery, useDeleteProductMutation } from '../inventoryApi';
 
 export default function ProductList() {
   const searchTerm = useSelector(selectSearchTerm);
-
   const { data, isLoading, isError } = useGetProductsQuery({ search: searchTerm });
+  
+  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
+
+  const handleDelete = async (id: number) => {
+    if (window.confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+      try {
+        await deleteProduct(id).unwrap();
+        alert('Producto eliminado exitosamente (Simulado en DummyJSON)');
+      } catch (error) {
+        console.error('Error al eliminar:', error);
+        alert('No se pudo eliminar el producto.');
+      }
+    }
+  };
 
   if (isLoading) return (
     <div className="flex justify-center items-center h-64">
@@ -30,7 +43,6 @@ export default function ProductList() {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {data?.products.map((product) => (
         <div key={product.id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
-          {}
           <div className="relative h-48 w-full bg-gray-50">
             <img 
               src={product.thumbnail} 
@@ -47,13 +59,24 @@ export default function ProductList() {
               <span className="ml-2 text-xs text-gray-500 uppercase tracking-wider">{product.category}</span>
             </div>
             <p className="text-sm text-gray-500 line-clamp-2 mb-4 h-10">{product.description}</p>
-            <div className="flex justify-between items-center">
+            
+            <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-50">
               <span className={`text-xs font-medium px-2 py-1 rounded-full ${product.stock < 20 ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'}`}>
                 Stock: {product.stock}
               </span>
-              <button className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
-                Editar Producto
-              </button>
+              
+              <div className="flex gap-3">
+                <button className="text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors">
+                  Editar
+                </button>
+                <button 
+                  onClick={() => handleDelete(product.id)}
+                  disabled={isDeleting}
+                  className="text-sm font-semibold text-red-500 hover:text-red-700 transition-colors disabled:opacity-50"
+                >
+                  {isDeleting ? 'Eliminando...' : 'Eliminar'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
