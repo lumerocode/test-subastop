@@ -20,7 +20,5 @@ export const inventorySlice = createSlice({
 });
 
 export const { setSearchTerm } = inventorySlice.actions;
-
 export const selectSearchTerm = (state: RootState) => state.inventoryUI.searchTerm;
-
 export default inventorySlice.reducer;
