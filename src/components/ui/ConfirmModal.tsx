@@ -35,12 +35,11 @@ export default function ConfirmModal({
   return createPortal(
     <div className="fixed inset-0 z-[100000] flex items-center justify-center p-4">
       <div 
-        className="fixed inset-0 bg-slate-900/60 animate-in fade-in duration-300" 
-        style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
+        className="fixed inset-0 modal-overlay-glass animate-modal-fade" 
         onClick={onClose} 
       />
       
-      <div className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 animate-in zoom-in-95 duration-200 border border-slate-100 z-[100001]">
+      <div className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 animate-modal-zoom border border-slate-100 z-[100001]">
         <button onClick={onClose} className="absolute right-6 top-6 text-slate-400 hover:text-slate-600 p-1">
           <X size={20} />
         </button>

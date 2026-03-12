@@ -76,12 +76,11 @@ export default function AddProductModal({ isOpen, onClose, initialData }: AddPro
   return createPortal(
     <div className="fixed inset-0 z-[100000] flex justify-center items-center p-4">
       <div 
-        className="fixed inset-0 bg-slate-900/60 animate-in fade-in duration-300" 
-        style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
+        className="fixed inset-0 modal-overlay-glass animate-modal-fade" 
         onClick={onClose}
       />
 
-      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200 border border-slate-100 z-[100001]">
+      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-modal-zoom border border-slate-100 z-[100001]">
         <div className="p-8 border-b border-slate-100 flex justify-between items-center">
           <h2 className="text-2xl font-bold text-slate-900">
             {initialData ? 'Editar Producto' : 'Nuevo Producto'}

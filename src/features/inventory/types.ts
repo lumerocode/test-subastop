@@ -14,8 +14,10 @@ export interface InventoryResponse {
   skip: number;
   limit: number;
 }
+
 export interface GetProductsArgs {
   search: string;
+  category: string;
   page: number;
   limit: number;
 }

@@ -8,7 +8,7 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({ product, onEdit, onDelete, isDeleting }: ProductCardProps) => (
-  <div className="bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
+  <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-md transition-shadow">
     <div className="relative h-48 w-full bg-gray-50 flex items-center justify-center">
       <img 
         src={product.thumbnail} 
