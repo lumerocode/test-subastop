@@ -8,7 +8,6 @@ interface Props {
 
 export const ProductFormFields = ({ register, errors }: Props) => (
   <div className="space-y-5">
-    {/* PRODUCT NAME */}
     <div>
       <label className="block text-sm font-semibold text-slate-700 mb-1">Nombre del Producto</label>
       <input 
@@ -19,14 +18,13 @@ export const ProductFormFields = ({ register, errors }: Props) => (
       {errors.title && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.title.message}</p>}
     </div>
 
-    {/* PRICE AND STOCK */}
     <div className="grid grid-cols-2 gap-4">
       <div>
         <label className="block text-sm font-semibold text-slate-700 mb-1">Precio ($)</label>
         <input 
           type="number" 
           step="0.01" 
-          {...register('price')} 
+          {...register('price', { valueAsNumber: true })} 
           placeholder="0.00"
           className="w-full border p-2.5 rounded-xl border-slate-200 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-900 transition-all" 
         />
@@ -36,7 +34,7 @@ export const ProductFormFields = ({ register, errors }: Props) => (
         <label className="block text-sm font-semibold text-slate-700 mb-1">Stock disponible</label>
         <input 
           type="number" 
-          {...register('stock')} 
+          {...register('stock', { valueAsNumber: true })} 
           placeholder="0"
           className="w-full border p-2.5 rounded-xl border-slate-200 outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 text-slate-900 transition-all" 
         />
@@ -44,7 +42,6 @@ export const ProductFormFields = ({ register, errors }: Props) => (
       </div>
     </div>
 
-    {/* CATEGORY */}
     <div>
       <label className="block text-sm font-semibold text-slate-700 mb-1">Categoría</label>
       <input 
@@ -55,7 +52,6 @@ export const ProductFormFields = ({ register, errors }: Props) => (
       {errors.category && <p className="text-red-500 text-xs mt-1.5 font-medium">{errors.category.message}</p>}
     </div>
 
-    {/* DESCRIPTION */}
     <div>
       <label className="block text-sm font-semibold text-slate-700 mb-1">Descripción</label>
       <textarea 

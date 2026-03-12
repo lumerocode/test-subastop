@@ -40,7 +40,7 @@ export default function ConfirmModal({
         onClick={onClose} 
       />
       
-      <div className="relative bg-white w-full rounded-3xl max-w-md rounded-[2.5rem] shadow-2xl p-8 animate-in zoom-in-95 duration-200 border border-slate-100 z-[100001]">
+      <div className="relative bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 animate-in zoom-in-95 duration-200 border border-slate-100 z-[100001]">
         <button onClick={onClose} className="absolute right-6 top-6 text-slate-400 hover:text-slate-600 p-1">
           <X size={20} />
         </button>

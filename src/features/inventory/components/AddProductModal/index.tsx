@@ -1,5 +1,6 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useForm, SubmitHandler, Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { productSchema, ProductFormData } from '../../schemas/productSchema';
@@ -16,14 +17,18 @@ interface AddProductModalProps {
 }
 
 export default function AddProductModal({ isOpen, onClose, initialData }: AddProductModalProps) {
+  const [mounted, setMounted] = useState(false);
   const [addProduct, { isLoading }] = useAddProductMutation();
   
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ProductFormData>({
     resolver: zodResolver(productSchema) as Resolver<ProductFormData>,
+    mode: 'all',
+    reValidateMode: 'onChange',
     defaultValues: { title: '', price: 0, stock: 0, category: '', description: '' }
   });
 
   useEffect(() => {
+    setMounted(true);
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
@@ -66,47 +71,48 @@ export default function AddProductModal({ isOpen, onClose, initialData }: AddPro
     }
   };
 
-  if (!isOpen) return null;
+  if (!mounted || !isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 z-[100002] flex justify-center items-center p-4 animate-in fade-in duration-200">
+  return createPortal(
+    <div className="fixed inset-0 z-[100000] flex justify-center items-center p-4">
       <div 
-        className="fixed inset-0 bg-slate-900/40" 
+        className="fixed inset-0 bg-slate-900/60 animate-in fade-in duration-300" 
         style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
         onClick={onClose}
       />
 
-      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200 border border-slate-100">
-        <div className="p-6 border-b border-slate-100 flex justify-between items-center">
-          <h2 className="text-xl font-bold text-slate-900">
+      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200 border border-slate-100 z-[100001]">
+        <div className="p-8 border-b border-slate-100 flex justify-between items-center">
+          <h2 className="text-2xl font-bold text-slate-900">
             {initialData ? 'Editar Producto' : 'Nuevo Producto'}
           </h2>
           <button onClick={onClose} className="text-slate-400 hover:text-slate-600 cursor-pointer p-1">
-            <X size={20} />
+            <X size={24} />
           </button>
         </div>
         
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-8">
           <ProductFormFields register={register} errors={errors} />
           
-          <div className="flex justify-end gap-3 mt-8">
+          <div className="flex justify-end gap-4 mt-8">
             <button 
               type="button" 
               onClick={onClose} 
-              className="px-5 py-2.5 text-slate-600 font-semibold hover:bg-slate-50 rounded-xl transition-colors cursor-pointer"
+              className="flex-1 py-4 text-slate-600 font-bold border border-slate-200 hover:bg-slate-50 rounded-2xl transition-all cursor-pointer active:scale-95"
             >
               Cancelar
             </button>
             <button 
               type="submit" 
               disabled={isLoading}
-              className="px-6 py-2.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 disabled:opacity-50 cursor-pointer active:scale-95"
+              className="flex-1 py-4 bg-indigo-600 text-white font-bold rounded-2xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 disabled:opacity-50 cursor-pointer active:scale-95"
             >
               {isLoading ? 'Guardando...' : initialData ? 'Actualizar' : 'Guardar'}
             </button>
           </div>
         </form>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
