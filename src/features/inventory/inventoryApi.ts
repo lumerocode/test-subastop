@@ -7,9 +7,16 @@ export const inventoryApi = createApi({
 
   tagTypes: ['Products'], 
   endpoints: (builder) => ({
-    getProducts: builder.query<InventoryResponse, { search: string }>({
-      query: ({ search }) => 
-        search ? `products/search?q=${search}` : `products?limit=10`,
+    getProducts: builder.query<InventoryResponse, { search: string; page: number }>({
+      query: ({ search, page }) => {
+        const limit = 12;
+        const skip = (page - 1) * limit;
+        
+        if (search) {
+          return `products/search?q=${search}&limit=${limit}&skip=${skip}`;
+        }
+        return `products?limit=${limit}&skip=${skip}`;
+      },
       providesTags: ['Products'],
     }),
     

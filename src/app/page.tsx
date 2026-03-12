@@ -32,25 +32,30 @@ export default function HomePage() {
         </header>
 
         <div className="space-y-8">
+          
           <div>
             <Suspense fallback={
-              <div className="h-14 w-full animate-pulse bg-slate-100 rounded-xl" />
+              <div className="h-16 w-full animate-pulse bg-slate-100 rounded-xl" />
             }>
               <InventoryFilters />
             </Suspense>
           </div>
 
           <section className="relative">
-            <div className="flex items-center justify-between mb-4 px-2">
-              <h2 className="text-sm font-bold uppercase tracking-widest text-slate-400">
+            <div className="flex items-center justify-between mb-6 px-2">
+              <h2 className="text-sm font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2">
                 Catálogo de Productos
               </h2>
             </div>
+            
             <ProductList />
           </section>
         </div>
 
-        <AddProductModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+        <AddProductModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+        />
       </div>
     </main>
   );
