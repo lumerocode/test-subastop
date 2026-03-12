@@ -24,13 +24,19 @@ export default function ProductList() {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
+    const timer = setTimeout(() => {
+      setIsMounted(true);
+    }, 0);
+
     const handleResize = () => {
       setItemsPerPage(window.innerWidth < 768 ? 6 : 12);
     };
     handleResize();
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   useEffect(() => {
@@ -51,7 +57,7 @@ export default function ProductList() {
       try {
         await deleteProduct(productIdToDelete).unwrap();
         toast.success('Producto eliminado exitosamente');
-      } catch (error) {
+      } catch {
         toast.error('No se pudo eliminar el producto');
       } finally {
         setShowDeleteConfirm(false);

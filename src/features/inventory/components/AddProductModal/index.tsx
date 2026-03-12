@@ -28,13 +28,18 @@ export default function AddProductModal({ isOpen, onClose, initialData }: AddPro
   });
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
+
     if (isOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
+
     return () => {
+      clearTimeout(timer);
       document.body.style.overflow = 'unset';
     };
   }, [isOpen]);

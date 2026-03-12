@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Product } from '../../types';
 
 interface ProductCardProps {
@@ -10,10 +11,13 @@ interface ProductCardProps {
 export const ProductCard = ({ product, onEdit, onDelete, isDeleting }: ProductCardProps) => (
   <div className="bg-white rounded-xl border border-gray-100 overflow-hidden shadow-md transition-shadow">
     <div className="relative h-48 w-full bg-gray-50 flex items-center justify-center">
-      <img 
+      <Image 
         src={product.thumbnail} 
         alt={product.title} 
-        className="max-w-full h-full object-contain p-4 relative z-0"
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+        className="object-contain p-4 z-0"
+        priority={false}
       />
 
       <span className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-indigo-600 shadow-sm z-10">

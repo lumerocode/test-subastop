@@ -22,7 +22,10 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
   const { user } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    setMounted(true);
+    const timer = setTimeout(() => {
+      setMounted(true);
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   const toggleMenu = () => setIsOpen(!isOpen);

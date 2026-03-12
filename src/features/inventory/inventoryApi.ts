@@ -51,9 +51,9 @@ export const inventoryApi = createApi({
         body: data,
       }),
       async onQueryStarted({ id, data }, { dispatch, queryFulfilled, getState }) {
-        const state = getState() as any;
-        const searchTerm = state.inventoryUI?.searchTerm || '';
-        const category = state.inventoryUI?.selectedCategory || '';
+        const state = getState() as unknown as { inventory: { searchTerm: string; selectedCategory: string } };
+        const searchTerm = state.inventory?.searchTerm || '';
+        const category = state.inventory?.selectedCategory || '';
         
         const patchResult = dispatch(
           inventoryApi.util.updateQueryData('getProducts', { search: searchTerm, category, page: 1, limit: 12 }, (draft) => {

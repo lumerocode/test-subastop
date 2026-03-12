@@ -1,10 +1,17 @@
 'use client';
+
+import React from 'react';
 import { Package, AlertTriangle, DollarSign, TrendingUp } from 'lucide-react';
 import { useGetProductsQuery } from '@/features/inventory/inventoryApi';
 import { StatCard } from './StatCard';
 
 export default function StatsGrid() {
-  const { data, isLoading } = useGetProductsQuery({ search: '', page: 1, limit: 100 });
+  const { data, isLoading } = useGetProductsQuery({ 
+    search: '', 
+    category: '', 
+    page: 1, 
+    limit: 100 
+  });
   
   if (isLoading || !data) {
     return (

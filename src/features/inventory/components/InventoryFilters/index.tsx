@@ -1,9 +1,15 @@
 'use client';
+
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { setSearchTerm, selectSearchTerm, setSelectedCategory, selectSelectedCategory } from '../../inventorySlice';
+import { 
+  setSearchTerm, 
+  selectSearchTerm, 
+  setSelectedCategory, 
+  selectSelectedCategory 
+} from '../../inventorySlice';
 import { useGetCategoriesQuery } from '../../inventoryApi';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { Search, Filter, ChevronDown } from 'lucide-react';
 
 export default function InventoryFilters() {
@@ -17,48 +23,77 @@ export default function InventoryFilters() {
   
   const { data: categories } = useGetCategoriesQuery();
   const [inputValue, setInputValue] = useState(searchTerm);
+  
+  const isSyncingFromUrl = useRef(false);
 
-  useEffect(() => {
-    const querySearch = searchParams.get('search') || '';
-    const queryCategory = searchParams.get('category') || '';
-    
-    setInputValue(querySearch);
-    dispatch(setSearchTerm(querySearch));
-    dispatch(setSelectedCategory(queryCategory));
-  }, [searchParams, dispatch]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (inputValue !== searchTerm) {
-        updateFilters(inputValue, selectedCategory);
-      }
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [inputValue]);
-
-  const updateFilters = (search: string, category: string) => {
+  const updateFilters = useCallback((search: string, category: string) => {
     dispatch(setSearchTerm(search));
     dispatch(setSelectedCategory(category));
 
     const params = new URLSearchParams(searchParams.toString());
     
-    if (search) params.set('search', search);
-    else params.delete('search');
+    if (search) {
+      params.set('search', search);
+    } else {
+      params.delete('search');
+    }
 
-    if (category && category !== 'all' && category !== '') params.set('category', category);
-    else params.delete('category');
+    if (category && category !== 'all' && category !== '') {
+      params.set('category', category);
+    } else {
+      params.delete('category');
+    }
 
     params.set('page', '1');
     
     router.replace(`${pathname}?${params.toString()}`);
-  };
+  }, [dispatch, pathname, router, searchParams]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      isSyncingFromUrl.current = true;
+      const querySearch = searchParams.get('search') || '';
+      const queryCategory = searchParams.get('category') || '';
+      
+      if (querySearch !== searchTerm) {
+        dispatch(setSearchTerm(querySearch));
+        setInputValue(querySearch);
+      }
+      if (queryCategory !== selectedCategory) {
+        dispatch(setSelectedCategory(queryCategory));
+      }
+      
+      const resetTimer = setTimeout(() => {
+        isSyncingFromUrl.current = false;
+      }, 50);
+
+      return () => clearTimeout(resetTimer);
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, [searchParams, dispatch, searchTerm, selectedCategory]);
+
+  useEffect(() => {
+    if (isSyncingFromUrl.current) return;
+
+    const timer = setTimeout(() => {
+      if (inputValue !== searchTerm) {
+        updateFilters(inputValue, selectedCategory);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [inputValue, searchTerm, selectedCategory, updateFilters]);
 
   const handleCategoryChange = (category: string) => {
     updateFilters(inputValue, category);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Escape') setInputValue('');
+    if (e.key === 'Escape') {
+      setInputValue('');
+      updateFilters('', selectedCategory);
+    }
   };
 
   return (
@@ -86,7 +121,7 @@ export default function InventoryFilters() {
         <select
           value={selectedCategory || 'all'}
           onChange={(e) => handleCategoryChange(e.target.value)}
-          className="w-full pl-11 pr-10 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none text-base shadow-sm cursor-pointer appearance-none-forced"
+          className="w-full pl-11 pr-10 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-700 focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 focus:bg-white transition-all outline-none text-base shadow-sm cursor-pointer appearance-none"
         >
           <option value="all">Todas las categorías</option>
           {categories?.map((cat) => (
@@ -96,7 +131,7 @@ export default function InventoryFilters() {
           ))}
         </select>
 
-        <div className="select-custom-arrow">
+        <div className="absolute right-4 pointer-events-none">
           <ChevronDown size={18} className="text-slate-400" />
         </div>
       </div>
