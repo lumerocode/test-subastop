@@ -1,50 +1,12 @@
 @import "tailwindcss";
 
 @theme {
-  
-}
+  --color-brand-primary: #4f46e5; /* indigo-600 */
+  --color-brand-dark: #0f172a;    /* slate-900 */
+  --color-brand-bg: #f8fafc;      /* slate-50 */
 
-@layer base {
-  button {
-    cursor: pointer;
-  }
-  
-  [role="button"] {
-    cursor: pointer;
-  }
-}
-
-@layer components {
-  .select-custom-arrow {
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    align-items: center;
-    pointer-events: none;
-    z-index: 10;
-  }
-
-  .appearance-none-forced {
-    -webkit-appearance: none !important;
-    -moz-appearance: none !important;
-    appearance: none !important;
-  }
-
-  .modal-overlay-glass {
-    background-color: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
-
-  .animate-modal-fade {
-    animation: fadeIn 0.3s ease-out forwards;
-  }
-
-  .animate-modal-zoom {
-    animation: zoomIn 0.2s ease-out forwards;
-  }
+  --animate-modal-fade: fadeIn 0.3s ease-out forwards;
+  --animate-modal-zoom: zoomIn 0.2s ease-out forwards;
 
   @keyframes fadeIn {
     from { opacity: 0; }
@@ -57,7 +19,33 @@
   }
 }
 
-body {
-  background-color: rgb(249 250 251);
-  color: rgb(17 24 39); 
+@layer base {
+  body {
+    @apply bg-[family-name:--color-brand-bg] text-slate-900 antialiased overflow-x-hidden;
+  }
+
+  button, [role="button"] {
+    @apply cursor-pointer transition-transform active:scale-95;
+  }
+}
+
+@layer components {
+  /* Glassmorphism for Modals */
+  .modal-overlay-glass {
+    @apply fixed inset-0 z-[100] flex items-center justify-center p-4;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* Utilities for Selects */
+  .appearance-none-forced {
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+  }
+
+  .select-custom-arrow {
+    @apply absolute right-4 top-1/2 -translate-y-1/2 flex items-center pointer-events-none z-10;
+  }
 }

@@ -50,6 +50,25 @@ export const inventoryApi = createApi({
         headers: { 'Content-Type': 'application/json' },
         body: data,
       }),
+      async onQueryStarted({ id, data }, { dispatch, queryFulfilled, getState }) {
+        const state = getState() as any;
+        const searchTerm = state.inventoryUI?.searchTerm || '';
+        const category = state.inventoryUI?.selectedCategory || '';
+        
+        const patchResult = dispatch(
+          inventoryApi.util.updateQueryData('getProducts', { search: searchTerm, category, page: 1, limit: 12 }, (draft) => {
+            const product = draft.products.find((p) => p.id === id);
+            if (product) {
+              Object.assign(product, data);
+            }
+          })
+        );
+        try {
+          await queryFulfilled;
+        } catch {
+          patchResult.undo();
+        }
+      },
       invalidatesTags: (result, error, { id }) => [
         { type: 'Products', id },
         { type: 'Products', id: 'LIST' },

@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { inventoryApi } from '@/features/inventory/inventoryApi';
 import inventoryReducer from '@/features/inventory/inventorySlice';
 import authReducer from '@/features/auth/authSlice';
+import { rtkQueryErrorLogger } from './middleware/errorMiddleware';
 
 export const makeStore = () => {
   return configureStore({
@@ -13,7 +14,7 @@ export const makeStore = () => {
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: false,
-      }).concat(inventoryApi.middleware),
+      }).concat(inventoryApi.middleware, rtkQueryErrorLogger),
   });
 };
 

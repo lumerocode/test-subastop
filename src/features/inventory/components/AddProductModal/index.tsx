@@ -57,17 +57,12 @@ export default function AddProductModal({ isOpen, onClose, initialData }: AddPro
     try {
       await addProduct(data).unwrap();
       
-      if (initialData) {
-        toast.success('Producto actualizado exitosamente');
-      } else {
-        toast.success('Producto creado con éxito');
-      }
+      toast.success(initialData ? 'Producto actualizado exitosamente' : 'Producto creado con éxito');
       
       reset();
       onClose();
     } catch (error) {
-      console.error('Error:', error);
-      toast.error('Hubo un error al procesar la solicitud');
+      console.error('Handled by middleware:', error);
     }
   };
 

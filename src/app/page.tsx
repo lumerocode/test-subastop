@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { RootState } from '@/store/store';
 import Sidebar from '@/components/layout/Sidebar';
 import LoginForm from '@/features/auth/components/LoginForm';
@@ -11,15 +12,23 @@ import AddProductModal from '@/features/inventory/components/AddProductModal';
 import { Plus } from 'lucide-react';
 
 export default function HomePage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'inventory'>('dashboard');
-  const [isModalOpen, setIsModalOpen] = useState(false);
   
+  const currentView = (searchParams.get('view') as 'dashboard' | 'inventory') || 'dashboard';
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const handleTabChange = (tab: 'dashboard' | 'inventory') => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('view', tab);
+    router.replace(`?${params.toString()}`);
+  };
 
   if (!isMounted) {
     return (
@@ -33,13 +42,12 @@ export default function HomePage() {
 
   return (
     <div className="flex min-h-screen bg-[#F8FAFC]">
-      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      <Sidebar activeTab={currentView} onTabChange={handleTabChange} />
       
       <main className="flex-1 w-full lg:ml-64 p-4 sm:p-6 lg:p-10 transition-all duration-300">
         <div className="max-w-7xl mx-auto">
           
-          {/* DASHBOARD VIEW */}
-          {activeTab === 'dashboard' && (
+          {currentView === 'dashboard' && (
             <div className="space-y-8 animate-in fade-in duration-500">
               <header className="mt-14 lg:mt-0">
                 <h1 className="text-3xl font-extrabold text-slate-900">Bienvenido al Dashboard</h1>
@@ -53,8 +61,7 @@ export default function HomePage() {
             </div>
           )}
 
-          {/* INVENTORY VIEW */}
-          {activeTab === 'inventory' && (
+          {currentView === 'inventory' && (
             <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500">
               <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-14 lg:mt-0">
                 <div>
