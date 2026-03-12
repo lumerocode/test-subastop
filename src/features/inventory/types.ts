@@ -14,3 +14,15 @@ export interface InventoryResponse {
   skip: number;
   limit: number;
 }
+export interface GetProductsArgs {
+  search: string;
+  page: number;
+  limit: number;
+}
+
+export interface StatCardProps {
+  title: string;
+  value: string | number;
+  icon: React.ReactNode;
+  color: string;
+}

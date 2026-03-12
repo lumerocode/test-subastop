@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { InventoryResponse, Product } from './types';
+import { InventoryResponse, Product, GetProductsArgs } from './types';
 
 export const inventoryApi = createApi({
   reducerPath: 'inventoryApi',
@@ -7,9 +7,8 @@ export const inventoryApi = createApi({
 
   tagTypes: ['Products'], 
   endpoints: (builder) => ({
-    getProducts: builder.query<InventoryResponse, { search: string; page: number }>({
-      query: ({ search, page }) => {
-        const limit = 12;
+    getProducts: builder.query<InventoryResponse, GetProductsArgs>({
+      query: ({ search, page, limit }) => {
         const skip = (page - 1) * limit;
         
         if (search) {

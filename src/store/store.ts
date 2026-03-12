@@ -1,12 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { inventoryApi } from '@/features/inventory/inventoryApi';
 import inventoryReducer from '@/features/inventory/inventorySlice';
+import authReducer from '@/features/auth/authSlice';
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       [inventoryApi.reducerPath]: inventoryApi.reducer,
       inventoryUI: inventoryReducer,
+      auth: authReducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

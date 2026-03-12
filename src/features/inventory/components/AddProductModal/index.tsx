@@ -7,6 +7,7 @@ import { useAddProductMutation } from '../../inventoryApi';
 import { ProductFormFields } from './ProductFormFields';
 import { X } from 'lucide-react';
 import { Product } from '../../types';
+import { toast } from 'sonner';
 
 interface AddProductModalProps {
   isOpen: boolean;
@@ -14,11 +15,7 @@ interface AddProductModalProps {
   initialData?: Product;
 }
 
-export default function AddProductModal({ 
-  isOpen, 
-  onClose, 
-  initialData 
-}: AddProductModalProps) {
+export default function AddProductModal({ isOpen, onClose, initialData }: AddProductModalProps) {
   const [addProduct, { isLoading }] = useAddProductMutation();
   
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ProductFormData>({
@@ -43,18 +40,25 @@ export default function AddProductModal({
   const onSubmit: SubmitHandler<ProductFormData> = async (data) => {
     try {
       await addProduct(data).unwrap();
-      alert(initialData ? 'Producto actualizado con éxito (Simulado)' : 'Producto agregado con éxito (Simulado)');
+      
+      if (initialData) {
+        toast.success('Producto actualizado exitosamente');
+      } else {
+        toast.success('Producto creado con éxito');
+      }
+      
       reset();
       onClose();
     } catch (error) {
       console.error('Error:', error);
+      toast.error('Hubo un error al procesar la solicitud');
     }
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex justify-center items-center z-50 p-4 animate-in fade-in duration-200">
+    <div className="fixed inset-0 bg-indigo-600/40 backdrop-blur-sm flex justify-center items-center z-50 p-4 animate-in fade-in duration-200">
       <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
         <div className="p-6 border-b border-slate-100 flex justify-between items-center">
           <h2 className="text-xl font-bold text-slate-900">
