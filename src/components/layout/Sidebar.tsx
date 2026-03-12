@@ -59,7 +59,14 @@ export default function Sidebar({ activeTab, onTabChange }: SidebarProps) {
         <div className="p-6 text-2xl font-bold border-b border-slate-800">AdminPanel</div>
         <div className="flex items-center gap-3 p-6 border-b border-slate-800">
           <div className="relative w-10 h-10 rounded-full overflow-hidden border-2 border-indigo-500/50">
-            <Image src="/images/profile.png" alt="Profile" fill className="object-cover" />
+            <Image 
+              src="/images/profile.png" 
+              alt="Profile" 
+              fill 
+              sizes="40px"
+              className="object-cover" 
+              priority
+            />
           </div>
           <div className="flex flex-col overflow-hidden">
             <span className="text-sm font-bold truncate">{user || 'Usuario'}</span>
