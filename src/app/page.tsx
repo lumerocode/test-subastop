@@ -56,7 +56,7 @@ export default function HomePage() {
           {/* INVENTORY VIEW */}
           {activeTab === 'inventory' && (
             <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-500">
-              <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-10 lg:mt-0">
+              <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mt-14 lg:mt-0">
                 <div>
                   <h1 className="text-3xl font-extrabold text-slate-900">Gestión de Inventario Pro</h1>
                   <p className="text-slate-500">Administra tus productos y stock.</p>

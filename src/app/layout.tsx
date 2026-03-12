@@ -14,10 +14,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="es" suppressHydrationWarning> 
-      <body suppressHydrationWarning className="antialiased">
+      <body suppressHydrationWarning className="antialiased overflow-x-hidden">
         <Toaster position="top-right" richColors closeButton />
         <StoreProvider>
-          {children}
+          <div className="relative z-[1]">
+            {children}
+          </div>
+          <div id="modal-root" />
         </StoreProvider>
       </body>
     </html>

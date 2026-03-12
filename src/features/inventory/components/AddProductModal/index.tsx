@@ -24,6 +24,17 @@ export default function AddProductModal({ isOpen, onClose, initialData }: AddPro
   });
 
   useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
     if (initialData && isOpen) {
       reset({
         title: initialData.title,
@@ -58,13 +69,19 @@ export default function AddProductModal({ isOpen, onClose, initialData }: AddPro
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-indigo-600/40 backdrop-blur-sm flex justify-center items-center z-50 p-4 animate-in fade-in duration-200">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-[100002] flex justify-center items-center p-4 animate-in fade-in duration-200">
+      <div 
+        className="fixed inset-0 bg-slate-900/40" 
+        style={{ backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)' }}
+        onClick={onClose}
+      />
+
+      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden animate-in zoom-in-95 duration-200 border border-slate-100">
         <div className="p-6 border-b border-slate-100 flex justify-between items-center">
           <h2 className="text-xl font-bold text-slate-900">
             {initialData ? 'Editar Producto' : 'Nuevo Producto'}
           </h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 cursor-pointer">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-600 cursor-pointer p-1">
             <X size={20} />
           </button>
         </div>
@@ -73,13 +90,17 @@ export default function AddProductModal({ isOpen, onClose, initialData }: AddPro
           <ProductFormFields register={register} errors={errors} />
           
           <div className="flex justify-end gap-3 mt-8">
-            <button type="button" onClick={onClose} className="px-5 py-2.5 text-slate-600 font-semibold hover:bg-slate-50 rounded-xl transition-colors cursor-pointer">
+            <button 
+              type="button" 
+              onClick={onClose} 
+              className="px-5 py-2.5 text-slate-600 font-semibold hover:bg-slate-50 rounded-xl transition-colors cursor-pointer"
+            >
               Cancelar
             </button>
             <button 
               type="submit" 
               disabled={isLoading}
-              className="px-6 py-2.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 disabled:opacity-50 cursor-pointer"
+              className="px-6 py-2.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-100 disabled:opacity-50 cursor-pointer active:scale-95"
             >
               {isLoading ? 'Guardando...' : initialData ? 'Actualizar' : 'Guardar'}
             </button>
