@@ -60,6 +60,10 @@ En el desarrollo de este proyecto se adoptó un enfoque de IA-Augmented Developm
 
 ---
 
+### 🏗️ Deploy
+El proyecto se encuentra deployado en vercel, el enlace es el siguiente:
+- https://test-subastop.vercel.app/
+
 ## 📝 Conclusión
 
 La IA permitió agilizar tareas repetitivas, permitiendo enfocar el esfuerzo manual en la arquitectura, la UX y la robustez del estado global.
